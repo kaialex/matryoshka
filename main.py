@@ -16,15 +16,23 @@ def checkAnswer(input_array: np.ndarray):
 
   #解がある場合の条件は、係数行列のランクと拡散係数行列のランクが等しいこと
   #解がただ一つの条件は、係数行列のランクと拡散係数行列のランクが等しく、係数行列のランクが変数の数と等しいこと
+  
+  answer = np.array([[None],[None],[None]])
 
   if rank_array == rank_array_coef and rank_array == 3:
-    st.write("解はただ一つです")
-    st.write("解は")
-    st.write(np.linalg.solve(array,array_d))
-  elif rank_array == rank_array_coef and rank_array <= 3:
-    st.write("解は無数にあります")
+    answer = np.linalg.solve(array,array_d)
+    st.write(f"解はただ一つです。解はA: {answer[0,0]}, B: {answer[1,0]}, C: {answer[2,0]}")
   else:
-    st.write("解はありません")
+    if np.all(input_array[0, 0:3] == 0):
+      answer[0,0] = input_array[0,3]
+    if np.all(input_array[1, 0:3] == 0):
+      answer[1,0] = input_array[1,3]
+    if np.all(input_array[2, 0:3] == 0):
+      answer[2,0] = input_array[2,3] 
+    if rank_array == rank_array_coef and rank_array <= 3:
+      st.write(f"解は無数にあります。解はA: {answer[0,0]}, B: {answer[1,0]}, C: {answer[2,0]}")
+    else:
+      st.write(f"解はありません。解はA: {answer[0,0]}, B: {answer[1,0]}, C: {answer[2,0]}")
 
 def calculate(df: pd.DataFrame):
   input_array = df.to_numpy()
@@ -33,9 +41,9 @@ def calculate(df: pd.DataFrame):
 def main():
   data_df = pd.DataFrame(
     {
-        "A": [0, 0, 0],
-        "B": [0, 0, 0],
-        "C": [0, 0, 0],
+        "A'": [0, 0, 0],
+        "B'": [0, 0, 0],
+        "C'": [0, 0, 0],
         "定数値": [0, 0, 0],
     },
     index=["A=", "B=", "C="],
